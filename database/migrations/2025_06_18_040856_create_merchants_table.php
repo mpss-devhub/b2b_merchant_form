@@ -44,6 +44,7 @@ return new class extends Migration
             $table->string('t_frontend_url')->nullable();
             $table->string('t_backend_url')->nullable();
             $table->string('t_ip_address')->nullable();
+            $table->string('t_payments')->nullable();
             $table->enum('t_integration_type', ['direct', 'redirect']);
             $table->enum('t_settlement_process', ['monthly', 'nego']);
 
@@ -62,8 +63,8 @@ return new class extends Migration
             $table->string('customer_journey')->nullable();
 
             // Signature
-            $table->string('signature');
-            $table->string('signed_name');
+            $table->string('signature')->nullable();
+            $table->string('signed_name')->nullable();
 
             $table->timestamps();
         });

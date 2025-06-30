@@ -1,7 +1,12 @@
 import { z } from "zod";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
-const ACCEPTED_IMAGE_TYPES = ["image/*"];
+const ACCEPTED_IMAGE_TYPES = [
+    "image/png",
+    "image/jpeg",
+    "image/jpg",
+    "image/webp",
+];
 const ACCEPTED_PDF_TYPE = ["application/pdf"];
 
 export const merchantRegisterSchema = z.object({
@@ -31,15 +36,21 @@ export const merchantRegisterSchema = z.object({
     a_phone_number: z.string(),
 
     t_app_type: z.string(),
-    t_web_url: z.string(),
+    t_web_url: z.string().url().optional().or(z.literal(null)),
     t_app_name: z.string(),
-    t_app_url: z.string(),
-    t_frontend_url: z.string(),
-    t_backend_url: z.string(),
-    t_ip_address: z.string(),
+    t_app_url: z.string().url().optional().or(z.literal(null)),
+    t_frontend_url: z.string().url().optional().or(z.literal(null)),
+    t_backend_url: z.string().url().optional().or(z.literal(null)),
+    t_ip_address: z
+        .string()
+        .ip({ version: "v4" })
+        .optional()
+        .or(z.literal(null)),
     t_integration_type: z.string(),
     t_settlement_process: z.string(),
-
+    t_payments: z
+        .array(z.string())
+        .min(1, "At least one payment method is required"),
     t_name: z.string().min(1, "Technical Person Name is required"),
     t_designation: z
         .string()
@@ -52,51 +63,81 @@ export const merchantRegisterSchema = z.object({
         .min(1, "Technical Person Phone Number is required"),
 
     d_company_extract_dica: z
-        .instanceof(File)
-        .refine((file) => file.size <= MAX_FILE_SIZE, {
+        .any()
+        .refine(
+            (val) => val instanceof FileList && val.length > 0,
+            "Dica file is required"
+        )
+        .refine((val) => val[0] instanceof File, "Input must be a file")
+        .refine((val) => val[0]?.size <= MAX_FILE_SIZE, {
             message: "PDF file size must be 10MB or less",
         })
-        .refine((file) => ACCEPTED_PDF_TYPE.includes(file.type), {
+        .refine((val) => ACCEPTED_PDF_TYPE.includes(val[0]?.type), {
             message: "Only PDF files are allowed",
         }),
     d_ceritificate_of_incorporation_company_registration: z
-        .instanceof(File)
-        .refine((file) => file.size <= MAX_FILE_SIZE, {
+        .any()
+        .refine(
+            (val) => val instanceof FileList && val.length > 0,
+            "Certificate of Incorporation / Company Registration is required"
+        )
+        .refine((val) => val[0] instanceof File, "Input must be a file")
+        .refine((val) => val[0]?.size <= MAX_FILE_SIZE, {
             message: "PDF file size must be 10MB or less",
         })
-        .refine((file) => ACCEPTED_PDF_TYPE.includes(file.type), {
+        .refine((val) => ACCEPTED_PDF_TYPE.includes(val[0]?.type), {
             message: "Only PDF files are allowed",
         }),
     d_corporate_profile: z
-        .instanceof(File)
-        .refine((file) => file.size <= MAX_FILE_SIZE, {
+        .any()
+        .refine(
+            (val) => val instanceof FileList && val.length > 0,
+            "Corporate Profile is required"
+        )
+        .refine((val) => val[0] instanceof File, "Input must be a file")
+        .refine((val) => val[0]?.size <= MAX_FILE_SIZE, {
             message: "PDF file size must be 10MB or less",
         })
-        .refine((file) => ACCEPTED_PDF_TYPE.includes(file.type), {
+        .refine((val) => ACCEPTED_PDF_TYPE.includes(val[0]?.type), {
             message: "Only PDF files are allowed",
         }),
     customer_journey: z
-        .instanceof(File)
-        .refine((file) => file.size <= MAX_FILE_SIZE, {
+        .any()
+        .refine(
+            (val) => val instanceof FileList && val.length > 0,
+            "Customer Journey is required"
+        )
+        .refine((val) => val[0] instanceof File, "Input must be a file")
+        .refine((val) => val[0]?.size <= MAX_FILE_SIZE, {
             message: "PDF file size must be 10MB or less",
         })
-        .refine((file) => ACCEPTED_PDF_TYPE.includes(file.type), {
+        .refine((val) => ACCEPTED_PDF_TYPE.includes(val[0]?.type), {
             message: "Only PDF files are allowed",
         }),
     business_logo: z
-        .instanceof(File)
-        .refine((file) => file.size <= MAX_FILE_SIZE, {
+        .any()
+        .refine(
+            (val) => val instanceof FileList && val.length > 0,
+            "Business logo is required"
+        )
+        .refine((val) => val[0] instanceof File, "Input must be a file")
+        .refine((val) => val[0]?.size <= MAX_FILE_SIZE, {
             message: "Image file size must be 10MB or less",
         })
-        .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file.type), {
-            message: "Only JPG, PNG, or WEBP images are allowed",
+        .refine((val) => ACCEPTED_IMAGE_TYPES.includes(val[0]?.type), {
+            message: "Only JPEG, JPG, PNG, or WEBP images are allowed",
         }),
     company_logo: z
-        .instanceof(File)
-        .refine((file) => file.size <= MAX_FILE_SIZE, {
+        .any()
+        .refine(
+            (val) => val instanceof FileList && val.length > 0,
+            "Company logo is required"
+        )
+        .refine((val) => val[0] instanceof File, "Input must be a file")
+        .refine((val) => val[0]?.size <= MAX_FILE_SIZE, {
             message: "Image file size must be 10MB or less",
         })
-        .refine((file) => ACCEPTED_IMAGE_TYPES.includes(file.type), {
-            message: "Only JPG, PNG, or WEBP images are allowed",
+        .refine((val) => ACCEPTED_IMAGE_TYPES.includes(val[0]?.type), {
+            message: "Only JPEG, JPG, PNG, or WEBP images are allowed",
         }),
 });

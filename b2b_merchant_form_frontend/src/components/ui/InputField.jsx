@@ -1,17 +1,20 @@
 import React from "react";
+import { useFormContext } from "react-hook-form";
 
 const InputField = ({
     label,
     name,
     type = "text",
-    register,
     required,
-    error,
     placeholder = "",
     accept,
     onChange,
 }) => {
     const isFileInput = type === "file";
+    const {
+        register,
+        formState: { errors },
+    } = useFormContext();
 
     return (
         <div className="mb-5">
@@ -32,13 +35,15 @@ const InputField = ({
                 accept={isFileInput ? accept : undefined}
                 {...(isFileInput
                     ? {
+                          ...register(name, { required }),
                           onChange: (e) => {
+                              register(name).onChange(e);
                               onChange?.(e);
                           },
                       }
                     : register(name, { required }))}
                 className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-                    error
+                    errors[name]
                         ? "border-red-500 focus:ring-red-300"
                         : "border-gray-300 focus:ring-blue-400"
                 } ${
@@ -48,8 +53,10 @@ const InputField = ({
                 }`}
             />
 
-            {error && (
-                <p className="text-sm text-red-500 mt-1">{error.message}</p>
+            {errors[name] && (
+                <p className="text-sm text-red-500 mt-1">
+                    {errors[name].message}
+                </p>
             )}
         </div>
     );

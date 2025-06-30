@@ -9,7 +9,7 @@ class RegisterMerchantRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     public function rules(): array
@@ -55,12 +55,12 @@ class RegisterMerchantRequest extends FormRequest
             't_phone_number' => 'nullable|string|max:20',
 
             // Documents
-            'd_company_extract_dica' => ['required', Rule::file()->mimes('pdf', 'jpg', 'jpeg', 'png')],
-            'd_ceritificate_of_incorporation_company_registration' => ['required', Rule::file()->mimes('pdf', 'jpg', 'jpeg', 'png')],
-            'customer_journey' => ['required', Rule::file()->mimes('pdf', 'jpg', 'jpeg', 'png')],
-            'd_corporate_profile' => ['required', Rule::file()->mimes('pdf', 'jpg', 'jpeg', 'png')],
-            'business_logo' => ['nullable', Rule::file()->mimes('jpg', 'jpeg', 'png ')],
-            'company_logo' => ['nullable', Rule::file()->mimes('jpg', 'jpeg', 'png ')],
+            'd_company_extract_dica' => ['required', 'mimes:pdf,jpg,jpeg,png'],
+            'd_ceritificate_of_incorporation_company_registration' => ['required', 'mimes:pdf,jpg,jpeg,png'],
+            'customer_journey' => ['required', 'mimes:pdf,jpg,jpeg,png'],
+            'd_corporate_profile' => ['required', 'mimes:pdf,jpg,jpeg,png'],
+            'business_logo' => ['nullable', 'mimes:jpg,jpeg,png'],
+            'company_logo' => ['nullable', 'mimes:jpg,jpeg,png'],
 
         ];
     }

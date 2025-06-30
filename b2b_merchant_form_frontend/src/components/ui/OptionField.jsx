@@ -1,14 +1,17 @@
 import React from "react";
+import { useFormContext } from "react-hook-form";
 
 const OptionField = ({
     label,
     name,
     options = [],
     type = "radio",
-    register,
     required = false,
-    error,
 }) => {
+    const {
+        register,
+        formState: { errors },
+    } = useFormContext();
     return (
         <div className="mb-5">
             {label && (
@@ -32,8 +35,8 @@ const OptionField = ({
                 ))}
             </div>
 
-            {error && (
-                <p className="text-sm text-red-500 mt-1">{error.message}</p>
+            {errors[name] && (
+                <p className="text-sm text-red-500 mt-1">{errors[name].message}</p>
             )}
         </div>
     );

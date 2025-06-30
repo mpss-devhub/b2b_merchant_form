@@ -1,54 +1,59 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
 
-const BankSelector = ({ register }) => {
+const BankSelector = () => {
     const [selectedBanks, setSelectedBanks] = useState([]);
     const [bankList, setBankList] = useState([]);
+    const {
+        setValue,
+        watch,
+        formState: { errors },
+    } = useFormContext();
 
     const allSelected =
         bankList.length > 0 && selectedBanks.length === bankList.length;
 
     const handleSelect = (payment_name) => {
-        setSelectedBanks((prevSelected) =>
-            prevSelected.includes(payment_name)
-                ? prevSelected.filter((name) => name !== payment_name)
-                : [...prevSelected, payment_name]
-        );
+        const newSelected = selectedBanks.includes(payment_name)
+            ? selectedBanks.filter((name) => name !== payment_name)
+            : [...selectedBanks, payment_name];
+
+        setSelectedBanks(newSelected);
+        setValue("t_payments", newSelected, { shouldValidate: true });
     };
 
     const toggleSelectAll = () => {
-        if (allSelected) {
-            setSelectedBanks([]);
-        } else {
-            setSelectedBanks(bankList.map((bank) => bank.payment_name));
-        }
+        const newSelected = allSelected
+            ? []
+            : bankList.map((b) => b.payment_name);
+
+        setSelectedBanks(newSelected);
+        setValue("t_payments", newSelected, { shouldValidate: true });
     };
 
     useEffect(() => {
         const fetchBanks = async () => {
             try {
                 const response = await fetch(
-                    "http://127.0.0.1:8000/api/payments",
-                    {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    }
+                    "http://127.0.0.1:8000/api/payments"
                 );
-
-                if (!response.ok) {
-                    throw new Error("Failed to fetch bank data");
-                }
-
                 const data = await response.json();
                 setBankList(data);
-            } catch (error) {
-                console.error("Error fetching banks:", error);
+            } catch (err) {
+                console.error("Error fetching banks", err);
             }
         };
-
         fetchBanks();
     }, []);
+
+    useEffect(() => {
+        const subscription = watch((value) => {
+            if (value.t_payments !== selectedBanks) {
+                setSelectedBanks(value.t_payments || []);
+            }
+        });
+        return () => subscription.unsubscribe();
+    }, [watch, selectedBanks]);
 
     return (
         <div className="mb-8">
@@ -59,6 +64,7 @@ const BankSelector = ({ register }) => {
                 <button
                     onClick={toggleSelectAll}
                     className="text-sm text-blue-600 hover:underline"
+                    type="button"
                 >
                     {allSelected ? "Deselect All" : "Select All"}
                 </button>
@@ -93,13 +99,16 @@ const BankSelector = ({ register }) => {
                                             : "grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100"
                                     }`}
                             />
-                            <span className="text-sm text-gray-700 font-medium">
-                                {bank.payment_name}
-                            </span>
                         </div>
                     );
                 })}
             </div>
+
+            {errors.t_payments && (
+                <p className="text-sm text-red-500 mt-2">
+                    {errors.t_payments.message}
+                </p>
+            )}
         </div>
     );
 };
