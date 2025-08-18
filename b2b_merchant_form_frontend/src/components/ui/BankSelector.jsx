@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
+import { baseUrl } from "../../types/urls";
 
 const BankSelector = () => {
     const [selectedBanks, setSelectedBanks] = useState([]);
@@ -34,9 +35,9 @@ const BankSelector = () => {
     useEffect(() => {
         const fetchBanks = async () => {
             try {
-                const response = await fetch(
-                    "http://127.0.0.1:8000/api/payments"
-                );
+                const response = await fetch(`
+                    ${baseUrl}/api/payments"
+                `);
                 const data = await response.json();
                 setBankList(data);
             } catch (err) {
@@ -90,7 +91,7 @@ const BankSelector = () => {
                                 }`}
                         >
                             <img
-                                src={`http://127.0.0.1:8000/bank_logo/${bank.payment_image}`}
+                                src={`${baseUrl}/bank_logo/${bank.payment_image}`}
                                 alt={bank.payment_name}
                                 className={`w-16 h-10 object-contain mb-2 transition duration-200
                                     ${

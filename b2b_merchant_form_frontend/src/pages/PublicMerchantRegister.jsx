@@ -166,7 +166,7 @@ const PublicMerchantRegister = () => {
                                     name="t_ip_address"
                                 />
                             </Grid>
-                            <BankSelector />
+                            <BankSelector name="t_payments" />
                         </Section>
 
                         <Section title="Technical Person Information">
@@ -192,11 +192,13 @@ const PublicMerchantRegister = () => {
                                     label="Company Extract (DICA)"
                                     name="d_company_extract_dica"
                                     type="file"
+                                    accept="application/pdf"
                                 />
                                 <InputField
                                     label="Certificate of Incorporation (Company Registration)"
                                     name="d_ceritificate_of_incorporation_company_registration"
                                     type="file"
+                                    accept="application/pdf"
                                 />
                                 <InputField
                                     label="Company Logo"
@@ -214,16 +216,18 @@ const PublicMerchantRegister = () => {
                                     label="Corporate Profile"
                                     name="d_corporate_profile"
                                     type="file"
+                                    accept="application/pdf"
                                 />
                                 <InputField
                                     label="Customer Journey"
                                     name="customer_journey"
                                     type="file"
+                                    accept="application/pdf"
                                 />
                             </Grid>
                         </Section>
                         <div className="flex justify-end mt-6">
-                            <button className="rounded-lg px-8 py-2 bg-gray-200 hover:bg-gray-300 duration-300">
+                            <button className="rounded-lg px-8 py-2 text-white font-semibold bg-cyan-700 hover:bg-cyan-600 duration-300">
                                 Register
                             </button>
                         </div>

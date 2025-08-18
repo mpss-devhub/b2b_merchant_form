@@ -10,16 +10,51 @@ export const merchantRegister = async (data) => {
         }
     }
 
-    const response = await fetch(
-        "http://127.0.0.1:8000/api/merchant",
-        {
-            method: "POST",
-            headers: {
-                "Accept": "application/json",
-            },
-            body: formData,
-        }
-    );
-    console.log("Response status:", response);
+    const response = await fetch(`${baseUrl}/api/merchant`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+        },
+        body: formData,
+    });
+    console.log(response);
     return response.json();
+};
+
+export const getMerchant = async () => {
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(`${baseUrl}/api/merchant`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching merchants:", error.message);
+        throw error;
+    }
+};
+
+export const getMerchantById = async (id) => {
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(`${baseUrl}/api/merchant/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching merchants:", error.message);
+        throw error;
+    }
 };

@@ -10,7 +10,6 @@ export const useMerchantRegisterForm = () => {
 
     const onSubmit = async (data) => {
         try {
-            console.log(data);
             await merchantRegister(data);
             alert("Process created successfully");
         } catch (error) {
