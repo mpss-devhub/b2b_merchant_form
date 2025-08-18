@@ -45,6 +45,7 @@ class RegisterMerchantRequest extends FormRequest
             't_frontend_url' => 'nullable|url|max:255',
             't_backend_url' => 'nullable|url|max:255',
             't_ip_address' => 'nullable|ip',
+            't_payments' => ['required'],
             't_integration_type' => ['required', Rule::in(['direct', 'redirect'])],
             't_settlement_process' => ['required', Rule::in(['monthly', 'nego'])],
 

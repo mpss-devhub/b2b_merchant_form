@@ -4,10 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterMerchantRequest;
 use App\Models\Merchant;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MerchantController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['store']]);
+    }
+
     public function store(RegisterMerchantRequest $request)
     {
         $fileFields = [
@@ -26,7 +33,7 @@ class MerchantController extends Controller
                 $file = $request->file($field);
                 $filename = uniqid() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
                 $path = $file->storeAs("public/{$folder}", $filename);
-                $data[$field] = str_replace('public/', 'storage/', $path); 
+                $data[$field] = str_replace('public/', 'storage/', $path);
             }
         }
 
@@ -36,5 +43,33 @@ class MerchantController extends Controller
             'message' => 'Merchant registered successfully',
             'merchant' => $merchant,
         ], 201);
+    }
+
+    public function index()
+    {
+        $merchants = Merchant::all();
+        return response()->json([
+            'success' => true,
+            'message' => 'Merchants retrieved successfully.',
+            'data' => $merchants
+        ]);
+    }
+
+    public function get($id)
+    {
+        $merchant = Merchant::find($id);
+        if (!$merchant) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Merchants not found',
+                'data' => 'Merchant Not Found'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Merchants retrieved successfully.',
+            'data' => $merchant
+        ]);
     }
 }

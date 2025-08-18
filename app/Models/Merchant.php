@@ -44,6 +44,7 @@ class Merchant extends Model
         't_ip_address',
         't_integration_type',
         't_settlement_process',
+        't_payments',
 
         // Technical Contact
         't_name',
