@@ -35,17 +35,13 @@ export const merchantRegisterSchema = z.object({
     a_email_address: z.string(),
     a_phone_number: z.string(),
 
-    t_app_type: z.string(),
-    t_web_url: z.string().url().optional().or(z.literal(null)),
+    t_app_type: z.array(z.string()).min(1, "At least one application type"),
+    t_web_url: z.string().optional(),
     t_app_name: z.string(),
     t_app_url: z.string().url().optional().or(z.literal(null)),
     t_frontend_url: z.string().url().optional().or(z.literal(null)),
     t_backend_url: z.string().url().optional().or(z.literal(null)),
-    t_ip_address: z
-        .string()
-        .ip({ version: "v4" })
-        .optional()
-        .or(z.literal(null)),
+    t_ip_address: z.string().optional(),
     t_integration_type: z.string(),
     t_settlement_process: z.string(),
     t_payments: z

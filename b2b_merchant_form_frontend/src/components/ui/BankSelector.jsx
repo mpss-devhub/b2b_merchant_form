@@ -36,7 +36,7 @@ const BankSelector = () => {
         const fetchBanks = async () => {
             try {
                 const response = await fetch(`
-                    ${baseUrl}/api/payments"
+                    ${baseUrl}/api/payments
                 `);
                 const data = await response.json();
                 setBankList(data);

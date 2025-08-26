@@ -2,21 +2,32 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { merchantRegisterSchema } from "../schemas/merchantRegisterSchema";
 import { merchantRegister } from "../services/merchantRegisterService";
+import { useState } from "react";
 
 export const useMerchantRegisterForm = () => {
     const methods = useForm({
         resolver: zodResolver(merchantRegisterSchema),
     });
 
+    const [loading, setLoading] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [message, setMessage] = useState("");
+
     const onSubmit = async (data) => {
+        setLoading(true);
         try {
-            await merchantRegister(data);
-            alert("Process created successfully");
+            const response = await merchantRegister(data);
+            if (response?.message === "Merchant registered successfully") {
+                setSuccess(true);
+                setMessage("Merchant registered successfully.");
+            }
         } catch (error) {
-            console.error("Error submitting process:", error);
-            alert("Something went wrong");
+            setSuccess(true);
+            setMessage("Something went wrong.");
+        } finally {
+            setLoading(false);
         }
     };
 
-    return { ...methods, onSubmit };
+    return { ...methods, onSubmit, loading, success, message };
 };

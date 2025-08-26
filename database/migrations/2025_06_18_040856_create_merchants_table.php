@@ -37,7 +37,7 @@ return new class extends Migration
             $table->string('a_phone_number')->nullable();
 
             // Technical Info
-            $table->enum('t_app_type', ['website', 'application'])->default('website');
+            $table->string('t_app_type')->nullable();
             $table->string('t_web_url')->nullable();
             $table->string('t_app_name')->nullable();
             $table->string('t_app_url')->nullable();

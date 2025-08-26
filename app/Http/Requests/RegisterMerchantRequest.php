@@ -38,13 +38,13 @@ class RegisterMerchantRequest extends FormRequest
             'a_phone_number' => 'nullable|string|max:20',
 
             // Technical Info
-            't_app_type' => ['required', 'string', Rule::in(['website', 'application'])],
+            't_app_type' => 'required|string|max:255',
             't_web_url' => 'nullable|url|max:255',
             't_app_name' => 'nullable|string|max:255',
             't_app_url' => 'nullable|url|max:255',
             't_frontend_url' => 'nullable|url|max:255',
             't_backend_url' => 'nullable|url|max:255',
-            't_ip_address' => 'nullable|ip',
+            't_ip_address' => 'nullable',
             't_payments' => ['required'],
             't_integration_type' => ['required', Rule::in(['direct', 'redirect'])],
             't_settlement_process' => ['required', Rule::in(['monthly', 'nego'])],

@@ -1,26 +1,49 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Section } from "../components/Section";
+import logo from "../../public/Octoverse Gateway logo.png";
 import Grid from "../components/Grid";
 import InputField from "../components/ui/InputField";
 import { useMerchantRegisterForm } from "../hooks/useMerchantRegisterForm";
 import OptionField from "../components/ui/OptionField";
 import BankSelector from "../components/ui/BankSelector";
 import { FormProvider } from "react-hook-form";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const PublicMerchantRegister = () => {
-    const { handleSubmit, onSubmit, ...methods } = useMerchantRegisterForm();
+    const { handleSubmit, onSubmit, loading, success, message, ...methods } =
+        useMerchantRegisterForm();
+
+    useEffect(() => {
+        if (success) {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    }, [success]);
 
     return (
         <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-6xl mx-auto">
-                <header className="text-center mb-10">
-                    <h3 className="text-3xl font-extrabold text-gray-800">
-                        Merchant Application
-                    </h3>
-                    <p className="text-gray-500 text-sm mt-2">
-                        Please provide all required business details
-                    </p>
+                <header className="flex flex-col md:flex-row items-center justify-center gap-4 mb-10">
+                    <div>
+                        <img
+                            src={logo}
+                            alt="Merchant Logo"
+                            className="h-14 md:h-16 w-auto"
+                        />
+                    </div>
+                    <div className="flex flex-col text-center md:text-left">
+                        <h3 className="text-3xl font-extrabold text-gray-800">
+                            Merchant Application
+                        </h3>
+                        <p className="text-gray-500 text-sm mt-2">
+                            Please provide all required business details
+                        </p>
+                    </div>
                 </header>
+                {success && (
+                    <div className="mb-4 p-4 bg-green-100 text-green-800 rounded">
+                        {message}
+                    </div>
+                )}
                 <FormProvider {...methods}>
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Section title="Business Information">
@@ -118,7 +141,7 @@ const PublicMerchantRegister = () => {
                                 <OptionField
                                     label="Which will you integrate with?"
                                     name="t_app_type"
-                                    type="radio"
+                                    type="checkbox"
                                     options={[
                                         { label: "Website", value: "website" },
                                         {
@@ -186,7 +209,10 @@ const PublicMerchantRegister = () => {
                                 />
                             </Grid>
                         </Section>
-                        <Section title="Required Documents">
+                        <Section
+                            title="Required Documents"
+                            note="Please notice that file size must be less than 10 MB."
+                        >
                             <Grid gridNumber={2}>
                                 <InputField
                                     label="Company Extract (DICA)"
@@ -227,8 +253,24 @@ const PublicMerchantRegister = () => {
                             </Grid>
                         </Section>
                         <div className="flex justify-end mt-6">
-                            <button className="rounded-lg px-8 py-2 text-white font-semibold bg-cyan-700 hover:bg-cyan-600 duration-300">
-                                Register
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className={`flex items-center justify-center gap-2 rounded-lg px-8 py-2 text-white font-semibold duration-300 
+            ${
+                loading
+                    ? "bg-cyan-400 cursor-not-allowed"
+                    : "bg-cyan-700 hover:bg-cyan-600"
+            }`}
+                            >
+                                {loading ? (
+                                    <>
+                                        <AiOutlineLoading3Quarters className="animate-spin h-5 w-5 text-white" />
+                                        Loading...
+                                    </>
+                                ) : (
+                                    "Register"
+                                )}
                             </button>
                         </div>
                     </form>

@@ -1,3 +1,5 @@
+import { baseUrl } from "../types/urls";
+
 export const merchantRegister = async (data) => {
     const formData = new FormData();
     for (const key in data) {
@@ -17,7 +19,6 @@ export const merchantRegister = async (data) => {
         },
         body: formData,
     });
-    console.log(response);
     return response.json();
 };
 
