@@ -73,11 +73,11 @@ const PublicMerchantRegister = () => {
                                     name="bd_settlement_bank_account_number_usd"
                                 />
                                 <InputField
-                                    label="Settlement Bank Account Name & Number(MMK)"
+                                    label="Settlement Bank Account Name(MMK)"
                                     name="bd_settlement_bank_account_name_mmk"
                                 />
                                 <InputField
-                                    label="Settlement Bank Account Name & Number(MMK)"
+                                    label="Settlement Bank Account Number(MMK)"
                                     name="bd_settlement_bank_account_number_mmk"
                                 />
                             </Grid>
