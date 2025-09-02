@@ -10,14 +10,21 @@ import { FormProvider } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const PublicMerchantRegister = () => {
-    const { handleSubmit, onSubmit, loading, success, message, ...methods } =
-        useMerchantRegisterForm();
+    const {
+        handleSubmit,
+        onSubmit,
+        loading,
+        show,
+        error,
+        message,
+        ...methods
+    } = useMerchantRegisterForm();
 
     useEffect(() => {
-        if (success) {
+        if (show) {
             window.scrollTo({ top: 0, behavior: "smooth" });
         }
-    }, [success]);
+    }, [show]);
 
     return (
         <div className="min-h-screen bg-gray-100 p-6">
@@ -39,8 +46,14 @@ const PublicMerchantRegister = () => {
                         </p>
                     </div>
                 </header>
-                {success && (
-                    <div className="mb-4 p-4 bg-green-100 text-green-800 rounded">
+                {show && (
+                    <div
+                        className={`mb-4 p-4 rounded ${
+                            error
+                                ? "bg-red-100 text-red-800"
+                                : "bg-green-100 text-green-800"
+                        }`}
+                    >
                         {message}
                     </div>
                 )}

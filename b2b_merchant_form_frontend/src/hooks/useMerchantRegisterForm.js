@@ -10,24 +10,31 @@ export const useMerchantRegisterForm = () => {
     });
 
     const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
+    const [show, setShow] = useState(false);
     const [message, setMessage] = useState("");
+    const [error, setError] = useState(false);
 
     const onSubmit = async (data) => {
+        setError(false);
         setLoading(true);
         try {
             const response = await merchantRegister(data);
             if (response?.message === "Merchant registered successfully") {
-                setSuccess(true);
+                setShow(true);
                 setMessage("Merchant registered successfully.");
+            } else {
+                setShow(true);
+                setError(true);
+                setMessage("Merchant registration failed.");
             }
         } catch (error) {
-            setSuccess(true);
+            setShow(true);
+            setError(true);
             setMessage("Something went wrong.");
         } finally {
             setLoading(false);
         }
     };
 
-    return { ...methods, onSubmit, loading, success, message };
+    return { ...methods, onSubmit, loading, show, message };
 };

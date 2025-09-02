@@ -40,7 +40,7 @@ class RegisterMerchantRequest extends FormRequest
             // Technical Info
             't_app_type' => 'required|min:1',
             't_web_url' => 'nullable|url|max:255',
-            't_app_name' => 'required|string|max:255',
+            't_app_name' => 'nullable|string|max:255',
             't_app_url' => 'nullable|url|max:255',
             't_frontend_url' => 'nullable|url|max:255',
             't_backend_url' => 'nullable|url|max:255',

@@ -39,7 +39,7 @@ return new class extends Migration
             // Technical Info
             $table->string('t_app_type');
             $table->string('t_web_url')->nullable();
-            $table->string('t_app_name');
+            $table->string('t_app_name')->nullable();
             $table->string('t_app_url')->nullable();
             $table->string('t_frontend_url')->nullable();
             $table->string('t_backend_url')->nullable();
