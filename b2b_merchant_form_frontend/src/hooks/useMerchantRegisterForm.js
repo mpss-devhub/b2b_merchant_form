@@ -22,6 +22,13 @@ export const useMerchantRegisterForm = () => {
             if (response?.message === "Merchant registered successfully") {
                 setShow(true);
                 setMessage("Merchant registered successfully.");
+            } else if (
+                response?.message ===
+                "Validation failed: Merchant with this name already exists."
+            ) {
+                setShow(true);
+                setError(true);
+                setMessage("Merchant with this name already exists.");
             } else {
                 setShow(true);
                 setError(true);

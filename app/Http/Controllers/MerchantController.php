@@ -25,7 +25,13 @@ class MerchantController extends Controller
             'd_corporate_profile' => 'corporate_profiles',
             'company_logo' => 'company_logos',
         ];
+        $exists = Merchant::where('bd_b_p_name', $request->bd_b_p_name)->exists();
 
+        if ($exists) {
+            return response()->json([
+                'message' => 'Validation failed: Merchant with this name already exists.'
+            ], 422);
+        }
         $data = $request->validated();
 
         foreach ($fileFields as $field => $folder) {
