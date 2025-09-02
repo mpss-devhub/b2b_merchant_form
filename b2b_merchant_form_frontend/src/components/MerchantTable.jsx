@@ -19,6 +19,12 @@ const MerchantTable = () => {
         }
     };
 
+    const cutText = (text, maxLength) => {
+        if (!text) return "";
+        if (text.length <= maxLength) return text;
+        return text.slice(0, maxLength) + "...";
+    };
+
     return (
         <div className="overflow-x-auto">
             <table className="min-w-max divide-y divide-gray-200">
@@ -42,21 +48,21 @@ const MerchantTable = () => {
                             <tr key={merchant.id} className="hover:bg-gray-50">
                                 <td className="p-4">{index + 1}</td>
                                 <td className="p-4">
-                                    {merchant.bd_company_name}
+                                    {cutText(merchant.bd_company_name, 20)}
                                 </td>
                                 <td className="p-4">
-                                    {merchant.bd_b_p_name}
-                                </td>
-                                <td className="p-4">{merchant.o_name}</td>
-                                <td className="p-4">
-                                    {merchant.bd_b_address}
+                                    {cutText(merchant.bd_b_p_name, 50)}
                                 </td>
                                 <td className="p-4">
-                                    {merchant.o_phone_number}
+                                    {cutText(merchant.o_name, 50)}
                                 </td>
                                 <td className="p-4">
-                                    {merchant.t_app_type}
+                                    {cutText(merchant.bd_b_address, 50)}
                                 </td>
+                                <td className="p-4">
+                                    {cutText(merchant.o_phone_number, 50)}
+                                </td>
+                                <td className="p-4">{merchant.t_app_type}</td>
                                 <td className="p-4">
                                     <Link
                                         to={merchant.t_web_url}
@@ -68,8 +74,33 @@ const MerchantTable = () => {
                                     </Link>
                                 </td>
                                 <td className="p-4">
-                                    {merchant.created_at}
+                                    {(() => {
+                                        const date = new Date(
+                                            merchant.created_at
+                                        );
+                                        return (
+                                            `${String(
+                                                date.getUTCDate()
+                                            ).padStart(2, "0")}/` +
+                                            `${String(
+                                                date.getUTCMonth() + 1
+                                            ).padStart(2, "0")}/` +
+                                            `${String(
+                                                date.getUTCFullYear()
+                                            ).slice(-2)} ` +
+                                            `${String(
+                                                date.getUTCHours()
+                                            ).padStart(2, "0")}:` +
+                                            `${String(
+                                                date.getUTCMinutes()
+                                            ).padStart(2, "0")}:` +
+                                            `${String(
+                                                date.getUTCSeconds()
+                                            ).padStart(2, "0")}`
+                                        );
+                                    })()}
                                 </td>
+
                                 <td className="p-4">
                                     <div className="flex justify-center items-center w-full h-full">
                                         <Link
