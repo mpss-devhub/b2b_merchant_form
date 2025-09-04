@@ -95,9 +95,11 @@ export const merchantRegisterSchema = z
         t_payments: z
             .array(z.string())
             .min(1, { message: "At least one payment method is required" }),
-        t_app_type: z
-            .array(z.string())
-            .min(1, { message: "Please select at least one application type" }),
+        t_app_type: z.preprocess((val) => {
+            if (Array.isArray(val)) return val;
+            if (typeof val === "string") return [val];
+            return [];
+        }, z.array(z.string()).min(1, { message: "Please select at least one application type" })),
 
         t_web_url: z
             .string()

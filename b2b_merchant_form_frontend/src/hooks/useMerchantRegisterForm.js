@@ -14,6 +14,8 @@ export const useMerchantRegisterForm = () => {
     const [message, setMessage] = useState("");
     const [error, setError] = useState(false);
 
+    const { reset } = methods;
+
     const onSubmit = async (data) => {
         setError(false);
         setLoading(true);
@@ -22,6 +24,7 @@ export const useMerchantRegisterForm = () => {
             if (response?.message === "Merchant registered successfully") {
                 setShow(true);
                 setMessage("Merchant registered successfully.");
+                reset();
             } else if (
                 response?.message ===
                 "Validation failed: Merchant with this name already exists."
@@ -43,5 +46,5 @@ export const useMerchantRegisterForm = () => {
         }
     };
 
-    return { ...methods, onSubmit, loading, show, message };
+    return { ...methods, onSubmit, loading, show, message, error };
 };
