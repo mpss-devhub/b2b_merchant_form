@@ -17,6 +17,8 @@ export const useMerchantRegisterForm = () => {
     const { reset } = methods;
 
     const onSubmit = async (data) => {
+        setMessage("");
+        setShow(false);
         setError(false);
         setLoading(true);
         try {
