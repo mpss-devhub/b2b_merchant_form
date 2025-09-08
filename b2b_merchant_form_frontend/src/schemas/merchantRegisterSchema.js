@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = [
     "image/png",
     "image/jpeg",
@@ -18,7 +18,14 @@ export const merchantRegisterSchema = z
             .string()
             .min(3, "Company name must be at least 3 characters long"),
         bd_b_p_name: z.string().min(1, "Business / Product Name is required"),
-        bp_b_type: z.string().min(1, "Business Type is required"),
+        bp_b_type: z
+            .string()
+            .min(1, "Business Type is required")
+            .max(50, "Business Type must be at most 50 characters long")
+            .regex(
+                NAME_REGEX,
+                "Business Type can only contain letters, spaces, apostrophes, and hyphens"
+            ),
         bd_b_address: z
             .string()
             .min(1, "Business Address is required")
@@ -135,7 +142,14 @@ export const merchantRegisterSchema = z
                 invalid_type_error: "Settlement Process must be selected",
             })
             .min(1, { message: "Integration type must be selected" }),
-        t_name: z.string().min(1, "Technical Person Name is required"),
+        t_name: z
+            .string()
+            .min(1, "Technical Person Name is required")
+            .max(50, "Business Type must be at most 50 characters long")
+            .regex(
+                NAME_REGEX,
+                "Business Type can only contain letters, spaces, apostrophes, and hyphens"
+            ),
         t_designation: z
             .string()
             .min(1, "Technical Person Designation is required"),
@@ -152,7 +166,6 @@ export const merchantRegisterSchema = z
                     "Phone number can only contain digits and may start with +",
             }),
 
-        // File validations
         d_company_extract_dica: z
             .any()
             .refine(
@@ -161,7 +174,7 @@ export const merchantRegisterSchema = z
             )
             .refine((val) => val[0] instanceof File, "Input must be a file")
             .refine((val) => val[0]?.size <= MAX_FILE_SIZE, {
-                message: "PDF file size must be 10MB or less",
+                message: "PDF file size must be 2MB or less",
             })
             .refine((val) => ACCEPTED_PDF_TYPE.includes(val[0]?.type), {
                 message: "Only PDF files are allowed",
@@ -175,7 +188,7 @@ export const merchantRegisterSchema = z
             )
             .refine((val) => val[0] instanceof File, "Input must be a file")
             .refine((val) => val[0]?.size <= MAX_FILE_SIZE, {
-                message: "PDF file size must be 10MB or less",
+                message: "PDF file size must be 2MB or less",
             })
             .refine((val) => ACCEPTED_PDF_TYPE.includes(val[0]?.type), {
                 message: "Only PDF files are allowed",
@@ -189,7 +202,7 @@ export const merchantRegisterSchema = z
             )
             .refine((val) => val[0] instanceof File, "Input must be a file")
             .refine((val) => val[0]?.size <= MAX_FILE_SIZE, {
-                message: "PDF file size must be 10MB or less",
+                message: "PDF file size must be 2MB or less",
             })
             .refine((val) => ACCEPTED_PDF_TYPE.includes(val[0]?.type), {
                 message: "Only PDF files are allowed",
@@ -203,7 +216,7 @@ export const merchantRegisterSchema = z
             )
             .refine((val) => val[0] instanceof File, "Input must be a file")
             .refine((val) => val[0]?.size <= MAX_FILE_SIZE, {
-                message: "PDF file size must be 10MB or less",
+                message: "PDF file size must be 2MB or less",
             })
             .refine((val) => ACCEPTED_PDF_TYPE.includes(val[0]?.type), {
                 message: "Only PDF files are allowed",
@@ -217,7 +230,7 @@ export const merchantRegisterSchema = z
             )
             .refine((val) => val[0] instanceof File, "Input must be a file")
             .refine((val) => val[0]?.size <= MAX_FILE_SIZE, {
-                message: "Image file size must be 10MB or less",
+                message: "Image file size must be 2MB or less",
             })
             .refine((val) => ACCEPTED_IMAGE_TYPES.includes(val[0]?.type), {
                 message: "Only JPEG, JPG, PNG, or WEBP images are allowed",
@@ -231,7 +244,7 @@ export const merchantRegisterSchema = z
             )
             .refine((val) => val[0] instanceof File, "Input must be a file")
             .refine((val) => val[0]?.size <= MAX_FILE_SIZE, {
-                message: "Image file size must be 10MB or less",
+                message: "Image file size must be 2MB or less",
             })
             .refine((val) => ACCEPTED_IMAGE_TYPES.includes(val[0]?.type), {
                 message: "Only JPEG, JPG, PNG, or WEBP images are allowed",
